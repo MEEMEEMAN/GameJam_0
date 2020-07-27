@@ -1,0 +1,17 @@
+{
+    "name": "Perhaps.Framework.Editor",
+    "references": [
+        "GUID:e3e4e7ee9d8afbc499c917cf688d474e"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using Perhaps.Editor;
 
 namespace Perhaps
 {
@@ -48,7 +47,10 @@ namespace Perhaps
             if (grid.data == null)
                 return;
 
-            Rect r = RectExt.ResizeRect(grid.data.gridRect, Handles.CubeHandleCap, grid.data.outlineColor, grid.data.fillColor, HandleUtility.GetHandleSize(Vector3.zero) * 0.1f, 0.1f);
+            Rect r = PerhapsEditorUtil.ResizableRectGizmo(grid.data.gridRect, Handles.CubeHandleCap, 
+                                                        grid.data.outlineColor, grid.data.fillColor, 
+                                             HandleUtility.GetHandleSize(Vector3.zero) * 0.1f, 0.1f);
+
             grid.data.gridRect = r;
         }
     }

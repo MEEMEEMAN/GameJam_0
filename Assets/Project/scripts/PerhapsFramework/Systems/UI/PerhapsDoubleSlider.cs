@@ -7,7 +7,7 @@ using UnityEngine.UI;
 namespace Perhaps
 {
     [RequireComponent(typeof(Slider))]
-    public class PerhapsDoubleSlider : UIElementPerhaps
+    public class PerhapsDoubleSlider : PUIElement
     {
         [SerializeField] Slider fgSlider;
         [SerializeField] Slider bgSlider;

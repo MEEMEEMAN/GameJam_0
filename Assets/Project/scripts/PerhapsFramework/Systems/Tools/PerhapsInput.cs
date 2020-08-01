@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 #if ENABLE_INPUT_SYSTEM
@@ -61,6 +62,12 @@ namespace Perhaps
 
         public static bool GetTouch(out Touch t)
         {
+            if (!mInputAllowed)
+            {
+                t = default;
+                return false;
+            }
+
             if (Touch.activeTouches.Count == 0)
             {
                 t = default;
@@ -73,6 +80,9 @@ namespace Perhaps
 
         public static Touch[] GetAllTouches()
         {
+            if (!mInputAllowed)
+                return null;
+
             return Touch.activeTouches.ToArray();
         }
 
@@ -247,22 +257,53 @@ namespace Perhaps
             }
         }
 
+        public static bool GetMouseDoubleTap()
+        {
+            if (!mInputAllowed)
+                return false;
+
+            if (doubleTapped)
+            {
+                doubleTapped = false;
+
+                if (Time.time - lastTap <= doubleTapTimeout)
+                    return true;
+            }
+
+            return false;
+        }
+
+        static bool doubleTapped = false;
+        const float doubleTapTimeout = 0.2f;
+        static float lastTap;
         public static bool GetMouseTap(int index, bool ignoreUI = false)
         {
             if (!mInputAllowed)
                 return false;
 
-            if (!ignoreUI && UIElementPerhaps.IsPointBlocked(MouseScreenPosition))
+
+            if (!ignoreUI && PUIElement.IsPointBlocked(MouseScreenPosition))
             {
                 return false;
             }
-
 
 #if ENABLE_INPUT_SYSTEM
             switch (index)
             {
                 case 0:
-                    return Mouse.current.leftButton.wasPressedThisFrame;
+                    bool tapped = Mouse.current.leftButton.wasPressedThisFrame;
+
+                    if (tapped && Time.time - lastTap <= doubleTapTimeout)
+                    {
+                        doubleTapped = true;
+                    }
+
+                    if(tapped)
+                    {
+                        lastTap = Time.time;
+                    }
+
+                    return tapped;
                 case 1:
                     return Mouse.current.rightButton.wasPressedThisFrame;
                 case 2:
@@ -311,7 +352,7 @@ namespace Perhaps
             if (!mInputAllowed)
                 return false;
 
-            if (!ignoreUI && UIElementPerhaps.IsPointBlocked(MouseScreenPosition))
+            if (!ignoreUI && PUIElement.IsPointBlocked(MouseScreenPosition))
             {
                 return false;
             }

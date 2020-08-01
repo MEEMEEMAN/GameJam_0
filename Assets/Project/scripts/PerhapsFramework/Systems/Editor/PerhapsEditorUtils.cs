@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-namespace Perhaps.Editor
+namespace Perhaps
 {
-    public static class RectExt
+    /// <summary>
+    /// General Purpose Editor Utillity.
+    /// </summary>
+    public static class PerhapsEditorUtil
     {
-        public static Rect ResizeRect(Rect rect, Handles.CapFunction capFunc, Color capCol, Color fillCol, float capSize, float snap)
+        public static Rect ResizableRectGizmo(Rect rect, Handles.CapFunction capFunc, Color capCol, Color fillCol, float capSize, float snap)
         {
             Vector2 halfRectSize = new Vector2(rect.size.x * 0.5f, rect.size.y * 0.5f);
 
@@ -49,6 +52,16 @@ namespace Perhaps.Editor
                 newPosition.y + topHandle * .5f + bottomHandle * .5f);
 
             return new Rect(newPosition.x, newPosition.y, newSize.x, newSize.y);
+        }
+
+        public static void DrawHorizontalLine(Color color, int thickness = 2, int padding = 10)
+        {
+            Rect r = EditorGUILayout.GetControlRect(GUILayout.Height(padding + thickness));
+            r.height = thickness;
+            r.y += padding / 2;
+            r.x -= 2;
+            r.width += 6;
+            EditorGUI.DrawRect(r, color);
         }
     }
 }

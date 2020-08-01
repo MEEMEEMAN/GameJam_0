@@ -30,11 +30,23 @@ namespace Perhaps
 
         public virtual bool GetTouch(out Touch touch)
         {
+            if (!allowInput)
+            {
+                touch = default;
+                return false;
+            }
+
+
             return PerhapsInput.GetTouch(out touch);
         }
 
         public virtual Touch[] GetAllTouches()
         {
+            if (!allowInput)
+            {
+                return null;
+            }
+
             return PerhapsInput.GetAllTouches();
         }
 #else
@@ -91,6 +103,14 @@ namespace Perhaps
                 return false;
 
             return PerhapsInput.GetMouseTap(index);
+        }
+
+        public virtual bool GetMouseDoubleTap()
+        {
+            if (!allowInput)
+                return false;
+
+            return PerhapsInput.GetMouseDoubleTap();
         }
 
         public virtual bool GetMouseReleased(int index)

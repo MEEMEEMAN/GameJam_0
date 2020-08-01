@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+using UnityEngine.UI;
 
 namespace Perhaps
 {
@@ -10,6 +12,9 @@ namespace Perhaps
         public Vector3 rightVector;
     }
 
+    /// <summary>
+    /// General Purpose Runtime Utillity.
+    /// </summary>
     public static class PerhapsUtils
     {
         public static T GetClosest<T, E>(this E relativeTo, params T[] other) where T : Component where E : Component
@@ -76,6 +81,13 @@ namespace Perhaps
             return new Vector3(color.r, color.g, color.b);
         }
 
+
+        /// <summary>
+        /// Returns the forward/right vectors of a transform relative to the surface hit.
+        /// </summary>
+        /// <param name="hit"></param>
+        /// <param name="relativeTo"></param>
+        /// <returns></returns>
         public static RelativeVectors GetRelativeVectors(this RaycastHit hit, Transform relativeTo)
         {
             RelativeVectors vectors = new RelativeVectors();
@@ -90,6 +102,12 @@ namespace Perhaps
             return Vector3.Angle(hit.normal, Vector3.up);
         }
 
+
+        /// <summary>
+        /// Set the layer of a gameobject and all of it's children.
+        /// </summary>
+        /// <param name="go"></param>
+        /// <param name="layer"></param>
         public static void SetLayerRecursive(this GameObject go, int layer)
         {
             go.layer = layer;
@@ -99,16 +117,14 @@ namespace Perhaps
             }
         }
 
-        public static Rect RectTransformToScreenSpace(this RectTransform transform)
-        {
-            Vector2 size = Vector2.Scale(transform.rect.size, transform.lossyScale);
-            return new Rect((Vector2)transform.position - (size * 0.5f), size);
-        }
-
         static Vector3[] WorldCorners = new Vector3[4];
-        public static Bounds GetWorldSpaceBounds(this RectTransform transform)
+        /// <summary>
+        /// Returns the area that the rect transform occupies.
+        /// </summary>
+        /// <param name="transform"></param>
+        /// <returns>A 3D Bounding Box</returns>
+        public static Bounds GetScreenSpaceBounds(this RectTransform transform)
         {
-
             transform.GetWorldCorners(WorldCorners);
             Bounds bounds = new Bounds(WorldCorners[0], Vector3.zero);
             for (int i = 1; i < 4; ++i)
@@ -119,58 +135,92 @@ namespace Perhaps
         }
 
         /// <summary>
-        /// In some cases, the collider we hit is a child of the component we are searching for.
-        /// We just simply check the parent aswell if the target does not have the component.
+        /// Returns the area that the rect transform occupies.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="target"></param>
-        /// <returns></returns>
-        public static T GetComponentFromTargetOrParent<T>(this Transform target)
+        /// <param name="transform"></param>
+        /// <returns>A 2D Bounding Box</returns>
+        public static Rect GetScreenSpaceRect(this RectTransform transform)
         {
-            return target.gameObject.GetComponentFromTargetOrParent<T>();
-        }
+            /*
+            * GetWorldCorners returns 4 UI Space points that go in a clockwise fashion.
+            * Bottom Left, Top Left, Top Right, Bottom Right
+            */
+            transform.GetWorldCorners(WorldCorners);
 
+            Rect r = new Rect()
+            {
+                //Bottom Left
+                min = WorldCorners[0],
+
+                //Top Right
+                max = WorldCorners[2]
+            };
+
+            return r;
+        }
 
         /// <summary>
-        /// In some cases, the collider we hit is a child of the component we are searching for.
-        /// We just simply check the parent aswell if the target does not have the component.
+        /// Searches the parents for a component.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="target"></param>
+        /// <param name="upCount">Amount of parents to search.</param>
         /// <returns></returns>
-        public static T GetComponentFromTargetOrParent<T>(this GameObject target)
+        public static T GetComponentFromParent<T>(this Transform t, int upCount, bool searchInChild = true) where T : Component
         {
-            T component = target.GetComponent<T>();
-            if(component == null)
+            if (searchInChild)
             {
-                if(target.transform.parent != null)
-                {
-                    component = target.transform.parent.GetComponent<T>();
-                }
+                T component = t.GetComponent<T>();
+                if (component != null)
+                    return component;
             }
 
-            return component;
-        }
-
-        public static T[] GetComponentsInParentAndChildren<T>(this Transform transform)
-        {
-            return GetComponentsInParentAndChildren<T>(transform.gameObject);
-        }
-
-        public static T[] GetComponentsInParentAndChildren<T>(this GameObject go)
-        {
-            List<T> components = new List<T>();
-            T parentComponent = go.GetComponent<T>();
-
-            if(parentComponent != null)
+            Transform parent = t.parent;
+            for (int i = 0; i < upCount; i++)
             {
-                components.Add(parentComponent);
-            }
-            components.AddRange(go.GetComponentsInChildren<T>(true));
+                if (parent == null)
+                    break;
 
-            return components.ToArray();
+                T component = parent.GetComponent<T>();
+                if (component != null)
+                    return component;
+
+                parent = parent.parent;
+            }
+
+            return null;
         }
 
+
+    }
+
+    /// <summary>
+    /// Helps with flag enums.
+    /// </summary>
+    public static class EnumHelperClass
+    {
+        public static bool IsSet<T>(this T flags, T flag) where T : struct
+        {
+            int flagsValue = (int)(object)flags;
+            int flagValue = (int)(object)flag;
+
+            return (flagsValue & flagValue) != 0;
+        }
+
+        public static void Set<T>(ref this T flags, T flag) where T : struct
+        {
+            int flagsValue = (int)(object)flags;
+            int flagValue = (int)(object)flag;
+
+            flags = (T)(object)(flagsValue | flagValue);
+        }
+
+        public static void Unset<T>(ref this T flags, T flag) where T : struct
+        {
+            int flagsValue = (int)(object)flags;
+            int flagValue = (int)(object)flag;
+
+            flags = (T)(object)(flagsValue & (~flagValue));
+        }
     }
 
 }

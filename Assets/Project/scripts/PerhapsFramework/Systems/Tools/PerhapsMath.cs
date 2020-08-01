@@ -41,12 +41,18 @@ namespace Perhaps
             return (x % m + m) % m;
         }
 
-        public const float FloatComparePrecisionError = 0.001f; //we are not snobs who tf cares about a 1 milli difference
-        public static bool FloatEquals(float lhs, float rhs)
+        /// <summary>
+        /// Compares floats.
+        /// </summary>
+        /// <param name="lhs"></param>
+        /// <param name="rhs"></param>
+        /// <param name="precision"></param>
+        /// <returns></returns>
+        public static bool FloatCompare(this float lhs, float rhs, float precision = 0.001f)
         {
             float diff = Mathf.Abs(lhs - rhs);
 
-            return diff < FloatComparePrecisionError;
+            return diff <= precision;
         }
 
         //first-order intercept using absolute target position

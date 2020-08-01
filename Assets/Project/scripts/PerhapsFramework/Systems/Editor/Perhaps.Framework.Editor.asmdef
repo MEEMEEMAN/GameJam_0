@@ -1,7 +1,8 @@
 {
     "name": "Perhaps.Framework.Editor",
     "references": [
-        "GUID:e3e4e7ee9d8afbc499c917cf688d474e"
+        "GUID:e3e4e7ee9d8afbc499c917cf688d474e",
+        "GUID:30817c1a0e6d646d99c048fc403f5979"
     ],
     "includePlatforms": [
         "Editor"

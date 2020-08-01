@@ -1,8 +1,10 @@
 {
     "name": "Perhaps.Framework",
     "references": [
+        "GUID:0d8beb7f090555447a6cf5ce9e54dbb4",
         "GUID:30817c1a0e6d646d99c048fc403f5979",
-        "GUID:6055be8ebefd69e48b49212b09b47b2f"
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:8b1b9cfb6120fa33f4605a97f4ef20a7"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

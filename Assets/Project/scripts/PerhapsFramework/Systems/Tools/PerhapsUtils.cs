@@ -35,6 +35,16 @@ namespace Perhaps
             return closest;
         }
 
+        public static Vector3 Clamp(Vector3 source, Vector3 min, Vector3 max)
+        {
+            Vector3 clamped = new Vector3();
+            clamped.x = Mathf.Clamp(source.x, min.x, max.x);
+            clamped.y = Mathf.Clamp(source.y, min.y, max.y);
+            clamped.z = Mathf.Clamp(source.z, min.z, max.z);
+
+            return clamped;
+        }
+
         public static T GetClosest<T, E>(this E relativeTo, List<T> other) where T : Component where E : Component
         {
             float sqrClosest = float.MaxValue;

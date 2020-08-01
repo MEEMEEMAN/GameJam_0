@@ -27,6 +27,12 @@ namespace Perhaps
         {
             constants.Init();
         }
+
+        private void Start()
+        {
+            PlayerEntity player = FindObjectOfType<PlayerEntity>();
+            MainCamera.instance.SetFollowTarget(player);
+        }
     }
 
 }

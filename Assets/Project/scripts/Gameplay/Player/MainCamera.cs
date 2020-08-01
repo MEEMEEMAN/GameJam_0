@@ -36,6 +36,9 @@ namespace Perhaps
                 return;
 
             Vector2 wasd = followed.input.GetWASDVector();
+            Vector3 center = followed.transform.position + (Vector3)followOffset;
+            center.z = transform.position.z;
+            transform.position = Vector3.Lerp(transform.position, center, Time.deltaTime * followLerpFactor);
         }
     }
 

@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Perhaps
+namespace Game
 {
     public class BGQuad : MonoBehaviour
     {
+        [Tooltip("If the quad gets out of the view frustum, it gets culled. thus we need to follow the camera.")]
+        public bool followCamera = true;
         public MeshFilter filter;
 
         private void OnValidate()

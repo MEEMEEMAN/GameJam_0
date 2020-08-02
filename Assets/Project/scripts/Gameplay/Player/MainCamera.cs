@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Perhaps
+namespace Game
 {
     public class MainCamera : MonoBehaviour
     {

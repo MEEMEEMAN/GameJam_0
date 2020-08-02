@@ -25,11 +25,6 @@ namespace Game
             {
                 Ray ray = MainCamera.instance.cam.ScreenPointToRay(input.MouseScreenPosition);
                 weapons.equipped.Aim(ray.origin);
-
-                if(input.GetMouseTap(0))
-                {
-                    weapons.equipped.Shoot();
-                }
             }
             
 

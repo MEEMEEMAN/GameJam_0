@@ -13,4 +13,3 @@ MonoBehaviour:
   m_Name: GameConstants
   m_EditorClassIdentifier: 
   groundedRaycastLength: 1
-  shurikenPrefab: {fileID: 2307731031744834228, guid: a2212e5ab1ac3604b843e620b1ae45eb, type: 3}

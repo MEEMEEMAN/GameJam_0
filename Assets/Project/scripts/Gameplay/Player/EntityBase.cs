@@ -8,17 +8,17 @@ namespace Game
     public class EntityBase : MonoBehaviour
     {
         [Header("Entity Base")]
-        [SerializeField] Collider[] Colliders;
+        [SerializeField] Collider2D[] Colliders;
         [SerializeField] Rigidbody2D rb2d;
 
-        public Collider[] colliders => Colliders;
+        public Collider2D[] colliders => Colliders;
         public Rigidbody2D rb => rb2d;
 
         public virtual void OnValidate()
         {
             if (Colliders == null || Colliders.Length == 0)
             {
-                Colliders = GetComponentsInChildren<Collider>();
+                Colliders = GetComponentsInChildren<Collider2D>();
             }
 
             if (rb2d == null)

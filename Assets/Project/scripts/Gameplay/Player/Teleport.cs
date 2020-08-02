@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Teleport : MonoBehaviour
 {
-    public GameObject bomb;
     public Vector3 loc;
     public int tpTokens;
 
@@ -22,10 +21,6 @@ public class Teleport : MonoBehaviour
             loc = transform.position;
         if (Input.GetKeyDown(KeyCode.Y))
             teleport();
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            Instantiate(bomb, transform);
-        }
     }
 
     public void teleport()

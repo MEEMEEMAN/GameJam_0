@@ -40,13 +40,20 @@ public class Teleport : MonoBehaviour
         var mid = MidCalc(transform.position, loc);
         var midf = MidCalc(transform.position, mid);
         var mida = MidCalc(mid, loc);
-        yield return new WaitForSeconds(0.03f);
+        transform.position = MidCalc(transform.position, midf);
+        yield return new WaitForSeconds(0.005f);
         transform.position = midf;
-        yield return new WaitForSeconds(0.03f);
+        yield return new WaitForSeconds(0.005f);
+        transform.position = MidCalc(midf, mid);
+        yield return new WaitForSeconds(0.005f);
         transform.position = mid;
-        yield return new WaitForSeconds(0.03f);
+        yield return new WaitForSeconds(0.005f);
+        transform.position = MidCalc(mid, mida);
+        yield return new WaitForSeconds(0.005f);
         transform.position = mida;
-        yield return new WaitForSeconds(0.03f);
+        yield return new WaitForSeconds(0.005f);
+        transform.position = MidCalc(mida, loc);
+        yield return new WaitForSeconds(0.005f);
         transform.position = loc;
     }
 

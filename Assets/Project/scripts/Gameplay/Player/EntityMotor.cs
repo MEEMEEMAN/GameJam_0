@@ -14,6 +14,10 @@ namespace Game
         [SerializeField] EntityMotorState MotorState;
         public EntityMotorState state => MotorState;
 
+        public event Action<EntityMotor, EntityFacing> OnFaceSwitch;
+
+        public EntityFacing facing { get; private set; }
+
         [Header("Ground Probing")]
         public float groundRayLength = 1f;
         public Vector2 groundCastSize = new Vector2(1, 1);
@@ -24,13 +28,12 @@ namespace Game
         public float jumpForce = 3f;
         public float midairVelReductionFactor = 0.5f;
 
-        Vector3 velocity;
-        bool jumping = false;
+        public Vector3 velocity { get; private set; }
         Vector3 prevFramePos;
 
         private void OnValidate()
         {
-            if(livingEntity == null)
+            if (livingEntity == null)
             {
                 livingEntity = GetComponent<LivingEntity>();
             }
@@ -43,62 +46,70 @@ namespace Game
 
         public void Move(Vector3 direction)
         {
-            if(direction.x > 0)
+            if (direction.sqrMagnitude.FloatCompare(0))
+            {
+                moveDir = Vector3.zero;
+                return;
+            }
+
+            EntityFacing face = facing;
+            if (direction.x > 0)
             {
                 moveDir = Vector3.Project(direction, Vector3.right);
+                facing = EntityFacing.RIGHT;
             }
             else
             {
                 moveDir = Vector3.Project(direction, Vector3.left);
+                facing = EntityFacing.LEFT;
             }
 
-            Orientation();
+            Debug.DrawRay(transform.position, moveDir, Color.blue);
+
+            if (face != facing)
+            {
+                if (OnFaceSwitch != null)
+                {
+                    OnFaceSwitch(this, facing);
+                }
+            }
+
         }
 
-        public void Jump()
+        public bool Jump()
         {
-            if (!jumping && state.isGrounded)
+            if (!state.isJumping && state.isGrounded)
             {
-                jumping = true;
+                state.isJumping = true;
                 entity.rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+                return true;
             }
-        }
 
-        void Orientation()
-        {
-            float angle = moveDir.x > 0 ? 0 : 180f;
-            Vector3 euler = transform.eulerAngles;
-
-            if (!euler.y.FloatCompare(angle))
-            {
-                euler.y = angle;
-                transform.eulerAngles = euler;
-            }
+            return false;
         }
 
         Vector3 moveDir;
         private void Update()
         {
-
             state.isGrounded = IsGrounded();
 
-            if (jumping)
+            if (state.isJumping)
             {
                 /*
-                    * Jumping is an arc motion, we check if we begin to descend from our initial jump.
+                 * Jumping is an arc motion, we check if we begin to descend from our initial jump.
                 */
 
                 float angle = CalculateAngle(transform.position, prevFramePos);
                 if (angle > 90f)
                 {
-                    jumping = false;
+                    state.isJumping = false;
                 }
             }
 
             prevFramePos = transform.position;
             velocity = Vector2.Lerp(velocity, moveDir * speed, Time.deltaTime * velocityChangeLerp);
 
-            if (state.isGrounded && !jumping)
+            if (state.isGrounded && !state.isJumping)
             {
                 entity.rb.velocity = velocity;
             }
@@ -120,9 +131,10 @@ namespace Game
             gameObject.SetLayerRecursive(2);
 
             int hitCount = Physics2D.BoxCastNonAlloc(transform.position, groundCastSize,
-                0f, Vector2.down, groundBuffer, groundRayLength);
+                                        0f, Vector2.down, groundBuffer, groundRayLength);
 
-            Debug.DrawRay(transform.position, Vector2.down * groundRayLength, Color.red);
+            PerhapsUtils.DrawBoxRay(transform.position, Vector3.down * groundRayLength,
+                                groundCastSize, hitCount > 0 ? Color.green : Color.red);
 
             //restore
             gameObject.SetLayerRecursive(layer);
@@ -138,6 +150,12 @@ namespace Game
             Debug.DrawRay(current, diff, Color.magenta);
             return Vector3.Angle(Vector3.up, diff);
         }
+    }
+
+    public enum EntityFacing
+    {
+        RIGHT = 1,
+        LEFT,
     }
 
     public class EntityMotorState

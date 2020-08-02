@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Perhaps;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,6 +17,7 @@ namespace Game
 
 
         public float groundedRaycastLength = 1f;
+        public ShurikenProjectile shurikenPrefab;
     }
 
 }

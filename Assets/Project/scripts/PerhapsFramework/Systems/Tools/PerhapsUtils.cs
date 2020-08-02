@@ -17,6 +17,154 @@ namespace Perhaps
     /// </summary>
     public static class PerhapsUtils
     {
+        /// <summary>
+        /// Like a Debug.DrawLine, but with boxes.
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <param name="halfExtent"></param>
+        /// <param name="color"></param>
+        /// <param name="crossLine"></param>
+        public static void DrawBoxLine(Vector3 start, Vector3 end, Vector2 halfExtent, Color color, bool crossLine = false)
+        {
+            Bounds b1 = new Bounds(start, halfExtent);
+            Bounds b2 = new Bounds(end, halfExtent);
+
+            Vector3 b1TopLeft = b1.TopLeft();
+            Vector3 b1BottomRight = b1.BottomRight();
+
+            Vector3 b2TopLeft = b2.TopLeft();
+            Vector3 b2BottomRight = b2.BottomRight();
+
+            Debug.DrawLine(b1.min, b2.min, color);
+            Debug.DrawLine(b1.max, b2.max, color);
+            Debug.DrawLine(b1TopLeft, b2TopLeft, color);
+            Debug.DrawLine(b1BottomRight, b2BottomRight, color);
+
+            DrawBounds(b1, color, crossLine);
+            DrawBounds(b2, color, crossLine);
+
+            if (crossLine)
+            {
+                Debug.DrawLine(b1BottomRight, b2.max, color);
+                Debug.DrawLine(b1.max, b2TopLeft, color);
+                Debug.DrawLine(b1TopLeft, b2.min, color);
+                Debug.DrawLine(b1.min, b2BottomRight, color);
+            }
+        }
+
+        /// <summary>
+        /// Like a Debug.DrawRay, but with boxes.
+        /// </summary>
+        /// <param name="origin"></param>
+        /// <param name="direction"></param>
+        /// <param name="halfExtent"></param>
+        /// <param name="color"></param>
+        /// <param name="crossLine"></param>
+        public static void DrawBoxRay(Vector3 origin, Vector3 direction, Vector3 halfExtent, Color color, bool crossLine = false)
+        {
+            DrawBoxLine(origin, origin + direction, halfExtent, color, crossLine);
+        }
+
+        public static void DrawBounds(Bounds b, Color color, bool crossLine = false)
+        {
+            Vector3 topLeft = b.max;
+            topLeft.x = b.min.x;
+
+            Vector3 bottomRight = b.min;
+            bottomRight.x = b.max.x;
+
+            Debug.DrawLine(b.min, bottomRight, color);
+            Debug.DrawLine(b.min, topLeft, color);
+            Debug.DrawLine(b.max, bottomRight, color);
+            Debug.DrawLine(b.max, topLeft, color);
+
+            if (crossLine)
+            {
+                Debug.DrawLine(b.min, b.max, color);
+            }
+        }
+
+        /*
+        /// <summary>
+        /// Usefull for visualizing Physics2D.BoxCast
+        /// </summary>
+        public static void DrawBoxLineAngled(Vector3 start, Vector3 end, float angle, Vector2 halfExtent, Color color, bool crossLine = false)
+        {
+            
+
+            Quaternion rotation = Quaternion.Euler(0f, 0f, angle);
+
+            Vector3 diff = end - start;
+            Vector3 center = start + (diff / 2);
+            Debug.DrawRay(center, Vector3.up);
+
+            Matrix4x4 mat = Matrix4x4.TRS(center, rotation, Vector3.one);
+
+            Bounds b1 = new Bounds(start, halfExtent);
+            Bounds b2 = new Bounds(end, halfExtent);
+
+            Vector3 b1TopLeft = b1.TopLeft();
+            Vector3 b1BottomRight = b1.BottomRight();
+
+            Vector3 b2TopLeft = b2.TopLeft();
+            Vector3 b2BottomRight = b2.BottomRight();
+
+            Debug.DrawLine(mat * b1.min, mat * b2.min, color);
+            Debug.DrawLine(mat * b1.max, mat * b2.max, color);
+            Debug.DrawLine(mat * b1TopLeft, mat * b2TopLeft, color);
+            Debug.DrawLine(mat * b1BottomRight, mat * b2BottomRight, color);
+
+            /*
+            DrawBounds(b1, color, crossLine);
+            DrawBounds(b2, color, crossLine);
+
+            if (crossLine)
+            {
+                Debug.DrawLine(b1BottomRight, b2.max, color);
+                Debug.DrawLine(b1.max, b2TopLeft, color);
+                Debug.DrawLine(b1TopLeft, b2.min, color);
+                Debug.DrawLine(b1.min, b2BottomRight, color);
+            }
+            
+        }
+        */
+        #region
+        /*
+using Perhaps;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+[ExecuteInEditMode]
+public class DrawTest : MonoBehaviour
+{
+    public Transform target;
+    public Vector2 halfExtent;
+    public Color color;
+    public bool crossLine = false;
+    public float angle = 0f;
+    public bool drawAngled = false;
+
+    void Update()
+    {
+        if(drawAngled)
+        {
+            PerhapsUtils.DrawBoxLineAngled(transform.position ,target.position, angle, halfExtent, color, crossLine);
+        }
+        else
+        {
+            PerhapsUtils.DrawBoxLine(transform.position, target.position, halfExtent, color, crossLine);
+        }
+    }
+}
+
+         */
+        #endregion
+
+
+
+
         public static T GetClosest<T, E>(this E relativeTo, params T[] other) where T : Component where E : Component
         {
             float sqrClosest = float.MaxValue;
@@ -25,7 +173,7 @@ namespace Perhaps
             for (int i = 0; i < other.Length; i++)
             {
                 float sqrDist = (other[i].transform.position - relativeTo.transform.position).sqrMagnitude;
-                if(sqrDist < sqrClosest)
+                if (sqrDist < sqrClosest)
                 {
                     sqrClosest = sqrDist;
                     closest = other[i];
@@ -33,6 +181,36 @@ namespace Perhaps
             }
 
             return closest;
+        }
+
+        static void NegateZ(Transform t)
+        {
+            Vector3 pos = t.localPosition;
+            pos.z *= -1f;
+            t.localPosition = pos;
+
+            for (int i = 0; i < t.childCount; i++)
+            {
+                NegateZ(t.GetChild(i));
+            }
+        }
+
+        /// <summary>
+        /// Multiplies a transform's, and all of it's children local z axis by -1.
+        /// </summary>
+        /// <param name="t"></param>
+        public static void NegateZRecursive(this Transform t)
+        {
+            NegateZ(t);
+        }
+
+        /// <summary>
+        /// Multiplies a gameobject's, and all of it's children local z axis by -1.
+        /// </summary>
+        /// <param name="t"></param>
+        public static void NegateZRecursive(this GameObject go)
+        {
+            NegateZRecursive(go.transform);
         }
 
         public static Vector3 Clamp(Vector3 source, Vector3 min, Vector3 max)
@@ -43,6 +221,32 @@ namespace Perhaps
             clamped.z = Mathf.Clamp(source.z, min.z, max.z);
 
             return clamped;
+        }
+
+        public static Vector3 TopLeft(this Bounds b)
+        {
+            Vector3 topLeft = b.max;
+            topLeft.x = b.min.x;
+
+            return topLeft;
+        }
+
+        public static Vector3 BottomRight(this Bounds b)
+        {
+            Vector3 bottomRight = b.max;
+            bottomRight.y = b.min.y;
+
+            return bottomRight;
+        }
+
+        public static Vector3 TopRight(this Bounds b)
+        {
+            return b.max;
+        }
+
+        public static Vector3 BottomLeft(this Bounds b)
+        {
+            return b.min;
         }
 
         public static T GetClosest<T, E>(this E relativeTo, List<T> other) where T : Component where E : Component

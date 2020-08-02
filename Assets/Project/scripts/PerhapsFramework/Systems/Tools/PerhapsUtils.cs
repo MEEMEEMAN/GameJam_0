@@ -284,7 +284,6 @@ public class DrawTest : MonoBehaviour
                 for (int j = 1; j < colliders.Length; j++)
                 {
                     Collider2D colB = colliders[j];
-
                     Physics2D.IgnoreCollision(colA, colB, ignore);
                 }
             }
@@ -379,7 +378,7 @@ public class DrawTest : MonoBehaviour
         /// <typeparam name="T"></typeparam>
         /// <param name="upCount">Amount of parents to search.</param>
         /// <returns></returns>
-        public static T GetComponentFromParent<T>(this Transform t, int upCount, bool searchInChild = true) where T : Component
+        public static T GetComponentFromParent<T>(this Transform t, int upCount, bool searchInChild = true)
         {
             if (searchInChild)
             {
@@ -401,7 +400,7 @@ public class DrawTest : MonoBehaviour
                 parent = parent.parent;
             }
 
-            return null;
+            return default;
         }
 
 

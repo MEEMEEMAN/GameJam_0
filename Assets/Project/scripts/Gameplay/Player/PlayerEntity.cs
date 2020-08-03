@@ -26,23 +26,9 @@ namespace Game
                 Ray ray = MainCamera.instance.cam.ScreenPointToRay(input.MouseScreenPosition);
                 weapons.equipped.Aim(ray.origin);
 
-
-                switch (weapons.equipped.GetFireMode())
+                if(input.GetMouseTap(0))
                 {
-                    case WeaponFireMode.SINGLE:
-                        if (input.GetMouseTap(0))
-                        {
-                            weapons.equipped.Shoot();
-                        }
-                        break;
-                    case WeaponFireMode.FULL:
-                        if (input.GetMouseHeld(0))
-                        {
-                            weapons.equipped.Shoot();
-                        }
-                        break;
-                    default:
-                        break;
+                    weapons.equipped.Shoot();
                 }
             }
             

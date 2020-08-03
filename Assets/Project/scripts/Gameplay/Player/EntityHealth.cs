@@ -10,7 +10,6 @@ namespace Game
         [SerializeField] LivingEntity livingEntity;
         public LivingEntity entity => livingEntity;
 
-
         public void DealDamage(DamageInfo damage)
         {
             

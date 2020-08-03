@@ -11,12 +11,6 @@ namespace Game
         public abstract void Aim(Vector3 aimPosition);
         public abstract void Shoot();
         public abstract string GetName();
-        public abstract WeaponFireMode GetFireMode();
-    }
-
-    public enum WeaponFireMode
-    {
-        SINGLE, FULL
     }
 
 }

@@ -6,6 +6,7 @@ using Perhaps;
 namespace Game
 {
     [RequireComponent(typeof(PerhapsInputNode), typeof(EntityMotor), typeof(EntityHealth))]
+    [RequireComponent(typeof(WeaponManager))]
     public class LivingEntity : EntityBase
     {
         [Header("LivingEntity")]
@@ -53,6 +54,8 @@ namespace Game
 
         private void OnFaceSwitch(EntityMotor motor, EntityFacing face)
         {
+            return;
+
             float angle = face == EntityFacing.RIGHT ? 0f : 180f;
             Vector3 euler = mainGraphic.transform.localEulerAngles;
             euler.y = angle;

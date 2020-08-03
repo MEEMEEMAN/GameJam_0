@@ -85,6 +85,14 @@ namespace Perhaps
             }
         }
 
+        public static Vector2 RandomVec2(Vector2 min, Vector2 max)
+        {
+            float x = UnityEngine.Random.Range(min.x, max.x);
+            float y = UnityEngine.Random.Range(min.y, max.y);
+
+            return new Vector2(x, y);
+        }
+
         /*
         /// <summary>
         /// Usefull for visualizing Physics2D.BoxCast

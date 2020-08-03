@@ -49,11 +49,21 @@ namespace Game
 
         void ShootProjectile()
         {
+
             ShurikenProjectile shurikenPrefab = GameConstants.instance.shurikenPrefab;
             ShurikenProjectile shurikenProj = Instantiate(shurikenPrefab, throwingHand.position, shuriken.transform.rotation);
             shurikenProj.Deploy(equipper, transform.right, throwForce);
+
+            shuriken.gameObject.SetActive(false);
         }
 
+        void ShowShuriken()
+        {
+            shuriken.gameObject.SetActive(true);
+            canShoot = true;
+        }
+
+        bool canShoot = true;
         public override void Dequip()
         {
             shuriken.transform.localPosition = shurikenPos;
@@ -75,7 +85,16 @@ namespace Game
 
         public override void Shoot()
         {
+            if (!canShoot)
+                return;
+
+            canShoot = false;
             animator.SetTrigger(throwHash);
+        }
+
+        public override WeaponFireMode GetFireMode()
+        {
+            return WeaponFireMode.FULL;
         }
     }
 

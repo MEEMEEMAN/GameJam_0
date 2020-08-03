@@ -1198,6 +1198,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 6704059630180983488, guid: 19da4c21e0e768b4f94ec2544b504462, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6704059630180983488, guid: 19da4c21e0e768b4f94ec2544b504462, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.5
+      objectReference: {fileID: 0}
     - target: {fileID: 6704059630180983489, guid: 19da4c21e0e768b4f94ec2544b504462, type: 3}
       propertyPath: m_Sprite
       value: 

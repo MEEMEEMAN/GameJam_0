@@ -29,6 +29,38 @@ namespace Perhaps
             return t * b + (1 - t) * a;
         }
 
+        //Cantor pair courtesey of:
+        //https://gist.github.com/GibsS/fdba8e3cdbd307652fc3c01336b32534
+
+        public static int CantorPair(int x, int y)
+        {
+            return (((x + y) * (x + y + 1)) / 2) + y;
+        }
+
+        public static void ReverseCantorPair(int cantor, out int x, out int y)
+        {
+            var t = (int)Mathf.Floor((-1 + Mathf.Sqrt(1 + 8 * cantor)) / 2);
+            x = t * (t + 3) / 2 - cantor;
+            y = cantor - t * (t + 1) / 2;
+        }
+
+        public static int SignedCantorPair(int x, int y)
+        {
+            x = x >= 0 ? 2 * x : -2 * x + 1;
+            y = y >= 0 ? 2 * y : -2 * y + 1;
+
+            return (((x + y) * (x + y + 1)) / 2) + y;
+        }
+
+        public static void SignedReverseCantorPair(int cantor, out int x, out int y)
+        {
+            var t = (int)Mathf.Floor((-1 + Mathf.Sqrt(1 + 8 * cantor)) / 2);
+            x = t * (t + 3) / 2 - cantor;
+            y = cantor - t * (t + 1) / 2;
+
+            x = x % 2 == 0 ? x / 2 : ((1 - x) / 2);
+            y = y % 2 == 0 ? y / 2 : ((1 - y) / 2);
+        }
 
         /// <summary>
         /// This exists because it can handle negative numbers.

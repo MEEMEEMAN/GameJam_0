@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Perhaps;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -39,6 +40,15 @@ namespace Game
             Vector3 center = followed.transform.position + (Vector3)followOffset;
             center.z = transform.position.z;
             transform.position = Vector3.Lerp(transform.position, center, Time.deltaTime * followLerpFactor);
+        }
+
+        public Vector3 WSCursorPosition
+        {
+            get
+            {
+                Ray ray = cam.ScreenPointToRay(PerhapsInput.MouseScreenPosition);
+                return ray.origin;
+            }
         }
     }
 

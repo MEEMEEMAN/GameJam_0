@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Game
-{
+{   
+    [ExecuteInEditMode]
     public class BGQuad : MonoBehaviour
     {
         [Tooltip("If the quad gets out of the view frustum, it gets culled. thus we need to follow the camera.")]
@@ -43,6 +44,7 @@ namespace Game
 
         private void LateUpdate()
         {
+
             if(MainCamera.instance != null)
             {
                 Vector3 pos = MainCamera.instance.transform.position;

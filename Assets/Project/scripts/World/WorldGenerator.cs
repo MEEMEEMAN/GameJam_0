@@ -1,6 +1,5 @@
 ﻿using Perhaps;
 using Perhaps.Procedural;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,7 +8,7 @@ namespace Game
     public class WorldGenerator : MonoBehaviour
     {
         public Transform observerTransform;
-        [Header("World Parameters")]
+        [Header("Chunk Parameters")]
         public Vector2 chunkSize;
 
         [Header("Render Parameters")]
@@ -41,7 +40,7 @@ namespace Game
             if (observerTransform == null)
                 return;
 
-            int[] chunks = GetChunksToRender(observerTransform.position);
+            int[] chunks = GetAdjacent(observerTransform.position, verticalChunkRenderRadius, horizontalChunkRenderRadius);
             Generate(chunks);
             Render(chunks);
         }
@@ -52,15 +51,15 @@ namespace Game
         }
 
         static List<int> chunkBuffer = new List<int>();
-        int[] GetChunksToRender(Vector3 observerPosition)
+        int[] GetAdjacent(Vector3 observerPosition, int vertAdjacent, int hozAdjacent)
         {
             Vector2Int middleChunk = GetChunkCoordinate(observerPosition);
 
             chunkBuffer.Clear();
 
-            for (int y = -verticalChunkRenderRadius; y <= verticalChunkRenderRadius; y++)
+            for (int y = -vertAdjacent; y <= vertAdjacent; y++)
             {
-                for (int x = -horizontalChunkRenderRadius; x <= horizontalChunkRenderRadius; x++)
+                for (int x = -hozAdjacent; x <= hozAdjacent; x++)
                 {
                     Vector2Int chunkCoord = new Vector2Int(middleChunk.x + (int)(x * chunkSize.x),
                                                             middleChunk.y + (int)(y * chunkSize.y));
@@ -120,7 +119,6 @@ namespace Game
         }
 
 
-
         void GenerateChunk(int id)
         {
             WorldChunk chunk = new WorldChunk();
@@ -131,6 +129,8 @@ namespace Game
 
             existingChunks.Add(id, chunk);
             PerhapsPoissonVolume poisson = new PerhapsPoissonVolume(poissonParams, chunk.bounds);
+            //GetAdjacent((Vector2)ChunkCoord, 1, 1);
+            
             poisson.Calculate();
 
             List<Vector2> points = poisson.GetPoints();
@@ -141,6 +141,7 @@ namespace Game
                 Vector2 scale = PerhapsUtils.RandomVec2(minDimensions, maxDimensions);
 
                 GameObject go = new GameObject();
+                go.tag = "Ground";
                 go.transform.SetParent(platformParent);
                 go.transform.position = position;
                 go.transform.localScale = scale;
@@ -148,7 +149,6 @@ namespace Game
                 SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
                 sr.sprite = platformSprite;
                 go.AddComponent<BoxCollider2D>();
-
 
                 chunk.platforms = new List<GameObject>();
                 go.name = $"{id}: Platform {i}";

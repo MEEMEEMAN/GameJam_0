@@ -87,6 +87,11 @@ namespace Perhaps.Procedural
         int seed;
 
 
+        public void SetGeneratedPoints(List<Vector2> points)
+        {
+            generatedPoints = points;
+        }
+
         public bool hasGenBounds {get; private set;}= false;
         public Bounds genBounds {get; private set;}
         public PerhapsPoissonVolume(PerhapsPoissonParameters parameters, Bounds genBounds)

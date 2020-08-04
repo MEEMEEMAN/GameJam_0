@@ -17,7 +17,7 @@ public class aShuriken : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log(collision.gameObject.tag);
+
         if (collision.gameObject.tag != "Ground")
         {
             transform.SetParent(collision.gameObject.transform, true);

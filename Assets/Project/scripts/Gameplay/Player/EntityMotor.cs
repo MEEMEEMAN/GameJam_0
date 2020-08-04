@@ -116,9 +116,6 @@ namespace Game
             else
             {
                 entity.rb.AddForce(velocity * midairVelReductionFactor);
-
-                Vector3 range = new Vector3(speed, speed, speed) * 1.2f;
-                entity.rb.velocity = PerhapsUtils.Clamp(entity.rb.velocity, -range, range);
             }
         }
 
@@ -158,6 +155,7 @@ namespace Game
         LEFT,
     }
 
+    [System.Serializable]
     public class EntityMotorState
     {
         public bool isJumping;

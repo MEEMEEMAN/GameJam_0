@@ -8,8 +8,6 @@ namespace Perhaps
     {
         /// <summary>
         /// Returns the closest round of distance / 2.
-        /// with a position of 10 and a distance of 20, our output is 0.
-        /// with a position of 10.000001 and a distance of 20, out output is 20.
         /// </summary>
         /// <param name="position"></param>
         /// <param name="distance"></param>
@@ -68,7 +66,7 @@ namespace Perhaps
         /// <param name="x"></param>
         /// <param name="m"></param>
         /// <returns></returns>
-        public static int mod(int x, int m)
+        public static int Mod(int x, int m)
         {
             return (x % m + m) % m;
         }

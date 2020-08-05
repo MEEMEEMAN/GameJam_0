@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Perhaps
 {
@@ -29,7 +30,6 @@ namespace Perhaps
 
         //Cantor pair courtesey of:
         //https://gist.github.com/GibsS/fdba8e3cdbd307652fc3c01336b32534
-
         public static int CantorPair(int x, int y)
         {
             return (((x + y) * (x + y + 1)) / 2) + y;
@@ -58,6 +58,14 @@ namespace Perhaps
 
             x = x % 2 == 0 ? x / 2 : ((1 - x) / 2);
             y = y % 2 == 0 ? y / 2 : ((1 - y) / 2);
+        }
+
+        public static Vector2 RandomVec2(Vector2 min, Vector2 max)
+        {
+            float x = Random.Range(min.x, max.x);
+            float y = Random.Range(min.y, max.y);
+
+            return new Vector2(x, y);
         }
 
         /// <summary>

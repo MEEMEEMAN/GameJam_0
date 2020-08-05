@@ -85,6 +85,54 @@ namespace Perhaps
             }
         }
 
+        /// <summary>
+        /// Schedule an action to get executed every frame indefinitely or until false is returned.
+        /// </summary>
+        public static void Execute(Func<bool> f)
+        {
+            PerhapsUtilsExecutor.ExecuteTimed(float.MaxValue, f);
+        }
+
+        /// <summary>
+        /// Schedule an action to get executed every frame indefinitely.
+        /// </summary>
+        public static void Execute(Action a)
+        {
+            Func<bool> f = new Func<bool>(() =>
+            {
+                a();
+                return true;
+            });
+
+            PerhapsUtilsExecutor.ExecuteTimed(float.MaxValue, f);
+        }
+
+        /// <summary>
+        /// Schedule an action to get executed every frame for a certain amount of time. thread safe.
+        /// </summary>
+        /// <param name="time"></param>
+        /// <param name="a"></param>
+        public static void ExecuteTimed(float time, Action a)
+        {
+            Func<bool> f = new Func<bool>(() =>
+            {
+                a();
+                return true;
+            });
+
+            PerhapsUtilsExecutor.ExecuteTimed(time,  f);
+        }
+
+        /// <summary>
+        /// Schedule an action to get executed every frame for a certain amount of time, or until it returns false. thread safe.
+        /// </summary>
+        /// <param name="time"></param>
+        /// <param name="a"></param>
+        public static void ExecuteTimed(float time, Func<bool> a)
+        {
+            PerhapsUtilsExecutor.ExecuteTimed(time, a);
+        }
+
         public static Vector2 RandomVec2(Vector2 min, Vector2 max)
         {
             float x = UnityEngine.Random.Range(min.x, max.x);

@@ -777,11 +777,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blockParent: {fileID: 1373468954}
   blockDistance: 1
-  wallSprite: {fileID: 6530179738444782934, guid: f826f8d891d78654aba9f217d3d1c6af, type: 3}
   roomDimensions: {x: 30, y: 15}
-  generationChainCount: 4
+  generationChainCount: 3
+  ceilingGapDimensions: {x: 4, y: 10}
+  ceilingGapOffset: {x: 8, y: 0}
+  wallGapDimensions: {x: 10, y: 4}
+  wallGapOffset: {x: 0, y: 4}
+  randomOffset: 1
+  platformParameters:
+    radius: 6
+    sampleRegionSize: {x: 10, y: 10}
+    maxSamplesBeforeRejection: 30
+    seed: 0
+  platformMinScale: {x: 10, y: 1}
+  platformMaxScale: {x: 3, y: 1}
+  downscale: 0.5
   observer: {fileID: 425893584}
   renderChainCount: 2
+  wallSprite: {fileID: 6530179738444782934, guid: f826f8d891d78654aba9f217d3d1c6af, type: 3}
+  platformSprite: {fileID: 6530179738444782934, guid: f826f8d891d78654aba9f217d3d1c6af, type: 3}
 --- !u!1001 &7883559414870106452
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -789,6 +803,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7883559414059089620, guid: 4339332c82fe65e44b3853f31431e63f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.243
+      objectReference: {fileID: 0}
+    - target: {fileID: 7883559414059089620, guid: 4339332c82fe65e44b3853f31431e63f, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.63
+      objectReference: {fileID: 0}
+    - target: {fileID: 7883559414059089620, guid: 4339332c82fe65e44b3853f31431e63f, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.76
+      objectReference: {fileID: 0}
     - target: {fileID: 7883559414457073540, guid: 4339332c82fe65e44b3853f31431e63f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 82.9

@@ -14,6 +14,9 @@ namespace Game
         public float spotRadius = 10f;
 
         public int[] range;
+        public GameObject player;
+        public GameObject bullet;
+        public Transform m;
 
 
         public void Start()
@@ -58,7 +61,7 @@ namespace Game
 
         BehaviorNodeResult ShootPlayer()
         {
-            Debug.Log("shot");
+            StartCoroutine(a());
             return BehaviorNodeResult.SUCCESS;
         }
 
@@ -67,6 +70,13 @@ namespace Game
             var x = UnityEngine.Random.Range(range[0], range[1]);
             Vector3 t = new Vector3(x, transform.position.y, transform.position.z);
             motor.Move(t);
+        }
+
+        IEnumerator a()
+        {
+            yield return new WaitForSeconds(0.5f);
+            Instantiate(bullet, m);
+            yield return new WaitForSeconds(0.5f);
         }
     }
 

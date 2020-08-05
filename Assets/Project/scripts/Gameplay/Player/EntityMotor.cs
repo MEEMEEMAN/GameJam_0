@@ -26,7 +26,7 @@ namespace Game
         public float speed = 3f;
         public float velocityChangeLerp = 10f;
         public float jumpForce = 3f;
-        public float midairVelReductionFactor = 0.5f;
+        public float midairVelFactor = 0.5f;
 
         public Vector3 velocity { get; private set; }
         Vector3 prevFramePos;
@@ -115,7 +115,7 @@ namespace Game
             }
             else
             {
-                entity.rb.AddForce(velocity * midairVelReductionFactor);
+                entity.rb.AddForce(velocity * midairVelFactor * Time.deltaTime);
             }
         }
 

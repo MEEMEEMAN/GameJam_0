@@ -19,10 +19,10 @@ namespace Game
 
         static int throwHash = Animator.StringToHash("throw");
 
-
-
+        Vector3 aimPos;
         public override void Aim(Vector3 aimPosition)
         {
+            aimPos = aimPosition;
             Vector3 diff = aimPosition - transform.position;
             diff.z = 0;
             diff.Normalize();
@@ -49,7 +49,6 @@ namespace Game
 
         void ShootProjectile()
         {
-
             ShurikenProjectile shurikenPrefab = GameConstants.instance.shurikenPrefab;
             ShurikenProjectile shurikenProj = Instantiate(shurikenPrefab, throwingHand.position, shuriken.transform.rotation);
             shurikenProj.Deploy(equipper, transform.right, throwForce);
@@ -95,6 +94,11 @@ namespace Game
         public override WeaponFireMode GetFireMode()
         {
             return WeaponFireMode.FULL;
+        }
+
+        public override Vector3 GetAimedPosition()
+        {
+            return aimPos;
         }
     }
 

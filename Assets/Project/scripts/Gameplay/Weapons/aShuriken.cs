@@ -11,13 +11,10 @@ namespace Game
 
             if (collision.gameObject.tag != "Ground")
             {
-                Rigidbody2D rb = GetComponent<Rigidbody2D>();
-
-                Vector3 pos = transform.position;
-                transform.SetParent(collision.transform, false);
-                transform.position = pos;
-                rb.bodyType = RigidbodyType2D.Kinematic;
+                transform.SetParent(collision.gameObject.transform, true);
+                GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
             }
+            GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
         }
     }
 

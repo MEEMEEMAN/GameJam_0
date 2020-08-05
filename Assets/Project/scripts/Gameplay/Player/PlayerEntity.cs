@@ -7,6 +7,12 @@ namespace Game
 {
     public class PlayerEntity : LivingEntity
     {
+        public static PlayerEntity instance;
+
+        public void Start()
+        {
+            instance = this;
+        }
         public override void Update()
         {
             base.Update();

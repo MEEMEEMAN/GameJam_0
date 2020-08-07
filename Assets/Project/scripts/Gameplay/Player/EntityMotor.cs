@@ -21,12 +21,14 @@ namespace Game
         [Header("Ground Probing")]
         public float groundRayLength = 1f;
         public Vector2 groundCastSize = new Vector2(1, 1);
+        public LayerMask groundedLayermask;
 
         [Header("Movement Settings")]
         public float speed = 3f;
         public float velocityChangeLerp = 10f;
         public float jumpForce = 3f;
         public float midairVelFactor = 0.5f;
+        public Vector2 velocityClamp;
 
         public Vector3 velocity { get; private set; }
         Vector3 prevFramePos;
@@ -117,24 +119,30 @@ namespace Game
             {
                 entity.rb.AddForce(velocity * midairVelFactor * Time.deltaTime);
             }
+
+            entity.rb.velocity = PerhapsUtils.Clamp(entity.rb.velocity, -velocityClamp, velocityClamp);
         }
 
         public const int hitBufferSize = 5;
         public RaycastHit2D[] groundBuffer = new RaycastHit2D[hitBufferSize];
+
+        Deque<int> layerTree = new Deque<int>();
         public bool IsGrounded()
         {
-            int layer = gameObject.layer;
+            layerTree.Clear();
+            gameObject.GetLayerTree(ref layerTree);
+
             //ignore raycast
             gameObject.SetLayerRecursive(2);
 
             int hitCount = Physics2D.BoxCastNonAlloc(transform.position, groundCastSize,
-                                        0f, Vector2.down, groundBuffer, groundRayLength);
+                                        0f, Vector2.down, groundBuffer, groundRayLength, groundedLayermask);
 
             PerhapsUtils.DrawBoxRay(transform.position, Vector3.down * groundRayLength,
                                 groundCastSize, hitCount > 0 ? Color.green : Color.red);
 
             //restore
-            gameObject.SetLayerRecursive(layer);
+            gameObject.ApplyLayerTree(layerTree);
 
             return hitCount > 0;
         }

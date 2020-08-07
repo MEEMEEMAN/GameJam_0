@@ -28,6 +28,7 @@ namespace Game
             constants.Init();
 
             Physics2D.IgnoreLayerCollision(11 /*Entity*/, 10 /*Rope*/, true);
+            Physics2D.IgnoreLayerCollision(10 /*Rope*/, 10 /*Rope*/, true);
         }
 
         private void Start()

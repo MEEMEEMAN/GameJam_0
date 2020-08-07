@@ -386,6 +386,42 @@ public class DrawTest : MonoBehaviour
             }
         }
 
+        public static void GetLayerTree(this GameObject go, ref Deque<int> container)
+        {
+            TraverseLayerTree(container, go.transform, false);
+        }
+
+        public static Deque<int> GetLayerTree(this GameObject go)
+        {
+            Deque<int> layers = new Deque<int>();
+            TraverseLayerTree(layers, go.transform, false);
+
+            return layers;
+        }
+
+        static void TraverseLayerTree(Deque<int> layers, Transform t, bool apply)
+        {
+            if(apply)
+            {
+                int layer = layers.RemoveFront();
+                t.gameObject.layer = layer;
+            }
+            else
+            {
+                layers.AddBack(t.gameObject.layer);
+            }
+
+            for (int i = 0; i < t.childCount; i++)
+            {
+                TraverseLayerTree(layers, t.GetChild(i), apply);
+            }
+        }
+
+        public static void ApplyLayerTree(this GameObject go, Deque<int> layers)
+        {
+            TraverseLayerTree(layers, go.transform, true);
+        }
+
         static Vector3[] WorldCorners = new Vector3[4];
         /// <summary>
         /// Returns the area that the rect transform occupies.

@@ -16,7 +16,9 @@ namespace Game
         [SerializeField] EntityMotor Motor;
         [SerializeField] EntityHealth Health;
         [SerializeField] WeaponManager WeaponManager;
+        [SerializeField] HingeJoint2D Hinge;
 
+        public HingeJoint2D hinge => Hinge;
         public PerhapsInputNode input => InputNode;
         public EntityMotor motor => Motor;
         public EntityHealth health => Health;
@@ -44,6 +46,11 @@ namespace Game
             if (WeaponManager == null)
             {
                 WeaponManager = GetComponent<WeaponManager>();
+            }
+
+            if (Hinge == null)
+            {
+                Hinge = GetComponent<HingeJoint2D>();
             }
         }
 

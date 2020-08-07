@@ -796,7 +796,7 @@ GameObject:
   - component: {fileID: 61844790}
   m_Layer: 11
   m_Name: Ninja
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -856,6 +856,7 @@ MonoBehaviour:
   velocityChangeLerp: 10
   jumpForce: 10
   midairVelFactor: 2
+  velocityClamp: {x: 20, y: 20}
 --- !u!114 &7883559414457073537
 MonoBehaviour:
   m_ObjectHideFlags: 0
